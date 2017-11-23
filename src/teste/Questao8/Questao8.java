@@ -1,58 +1,55 @@
 package teste.Questao8;
 
-import java.util.Random;
-
+/**
+ *
+ * @author Igor Queiroz
+ */
 public class Questao8 {
-
-	/*
-	   - O primeiro número de C é o primeiro número de A;
-	   - O segundo número de C é o primeiro número de B;
-	   - O terceiro número de C é o segundo número de A;
-       - O quarto número de C é o segundo número de B;
+    
+    public static void main(String[] args) {
+        System.out.println("Valor concatenado ( 150122): " + concatenarValor(102, 512));
+        System.out.println("Valor concatenado (-964378): " + concatenarValor(947, -638));
+        System.out.println("Valor concatenado (1501225): " + concatenarValor(1025, 512));
+        System.out.println("Valor concatenado (     -1): " + concatenarValor(10256, 512));
+    }
+    
+    public static int concatenarValor(int numA, int numB) {
+        String prefixo = "";
+        if (numA < 0) {
+            numA *= -1;
+            prefixo = "-";
+        }
+        if (numB < 0) {
+            numB *= -1;
+            prefixo = "-";
+        }
+        final String numAStr = Integer.toString(numA);
+        final String numBStr = Integer.toString(numB);
         
-        Assim sucessivamente...
-       
-       - Caso os números de A ou B sejam de tamanhos diferentes, completar C com o restante
-          dos números do inteiro maior. Ex: A = 10256, B = 512, C deve ser 15012256.
-       - Caso C seja maior que 1.000.000, retornar -1
-         
-        Desenvolva um algoritmo que atenda a todos os requisitos acima.
-	 */
-	
-	public static int showNewNumber(Integer arg1, Integer arg2) {
-		
-		try {
-			Integer maior = arg1 > arg2 ? arg1 : arg2;
-			Integer menor = maior == arg1 ? arg2 : arg1;
-			
-			String C = "";
-			
-			for (int i = 0; i < maior.toString().length(); i++) {
-				C += maior.toString().substring(i,i+1);
-				for (int j = i; j < menor.toString().length();) {
-					C += menor.toString().substring(j, j+1);
-					break;
-				}
-			}
-			
-			return Integer.parseInt(C) > 1000000 ? -1 : Integer.parseInt(C);
-		} catch (NumberFormatException e) {
-			return -1;
-		}
-	}
+        final int qtdDigitosNumA = numAStr.length();
+        final int qtdDigitosNumB = numBStr.length();
 
-	/* As chances do Random.nextInt trazer números grandes que ao somar com o próximo inteiro gerem um 
-	 * @NumberFormatException são enormes, sugiro que para testar o método sete um valor máximo como parâmetro para o nextInt().
-	 */
-	public static void main(String[] args) {
-		Random rand = new Random();
-		Integer A = Math.abs(rand.nextInt());
-		Integer B = Math.abs(rand.nextInt());
-		Integer C = 0;
-		
-		C = Questao8.showNewNumber(A, B);
-		
-		System.out.println(C);
-		
-	}
+        if (qtdDigitosNumA + qtdDigitosNumB > 7) {
+            return -1;
+        }
+
+        int indiceMenor;
+        String maiorNumero;
+        if (qtdDigitosNumA < qtdDigitosNumB) {
+            maiorNumero = numBStr;
+            indiceMenor = qtdDigitosNumA;
+        } else {
+            maiorNumero = numAStr;
+            indiceMenor = qtdDigitosNumB;
+        }
+        final String sufixo = maiorNumero.substring(indiceMenor);
+
+        String novoNumero = "";
+        for (int i = 0; i < indiceMenor; i++) {
+            novoNumero += numAStr.charAt(i);
+            novoNumero += numBStr.charAt(i);
+        }
+        novoNumero = prefixo + novoNumero + sufixo;
+        return Integer.parseInt(novoNumero);
+    }
 }
